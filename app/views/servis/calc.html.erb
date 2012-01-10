@@ -1,0 +1,25 @@
+﻿Калькулятор!
+<%= form_tag '/servis/calc' do %>
+<br />
+    <%= text_field_tag :one, @calc %>
+    <%= @rez%>
+
+    <%= submit_tag "=" %>
+    <%= submit_tag "+" %>
+    <%= submit_tag "*" %>
+    <%= submit_tag "/" %>
+    <%= submit_tag "-" %><br />
+
+
+    <%= submit_tag "1" %>
+    <%= submit_tag "2" %>
+    <%= submit_tag "3" %><br />
+    <%= submit_tag "4" %>
+    <%= submit_tag "5" %>
+    <%= submit_tag "6" %><br />
+    <%= submit_tag "7" %>
+    <%= submit_tag "8" %>
+    <%= submit_tag "9" %><br />
+    <%= submit_tag "0" %>
+    <%= submit_tag "  CE  " %>
+<% end %>

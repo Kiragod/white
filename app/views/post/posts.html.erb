@@ -1,0 +1,16 @@
+﻿<h1>Все сообщения</h1>
+
+ <% @pst.each do |p| %>
+   <%=p.userh%>:
+   <%=p.text%><br /><br />
+
+
+ <% end %>
+
+<%= form_tag '/post/posts' do %>
+  Текст<br />
+  <%= text_field_tag :figna, "" %>
+
+  <%= submit_tag "get" %><br /><br />
+<% end %>
+

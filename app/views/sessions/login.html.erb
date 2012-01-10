@@ -1,0 +1,11 @@
+﻿<h1>Войти</h1>
+
+<%= form_tag '/sessions/login' do %>
+  Логин
+  <%= text_field_tag :login, "" %><br />
+  Пароль
+  <%= password_field_tag :password, "" %>
+
+  <%= submit_tag "Войти" %><br /><br />
+<% end %>
+

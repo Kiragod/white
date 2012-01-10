@@ -1,0 +1,1412 @@
+﻿<h1>Shaolin</h1>
+
+Описание:
+<br /><br />
+Бот для фарма в онлайн игре TimeZero. Основан на анализе изображения. Взоимодействует с клиентом через управление клавиатурой и мышью, что обеспечивает очень высокий уровень надежности от бана.
+<br /><br />   <br />
+Исходный код:
+
+<p><br />
+unit Unit1;</p>
+
+<p>interface</p>
+
+<p>uses<br />
+ Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,<br />
+ Dialogs, ExtCtrls, StdCtrls;</p>
+
+<p>type<br />
+ TForm1 = class(TForm)<br />
+ Button1: TButton;<br />
+ Memo1: TMemo;<br />
+ Button2: TButton;<br />
+ Button3: TButton;<br />
+ Image1: TImage;<br />
+ Button4: TButton;<br />
+ Edit1: TEdit;<br />
+ Button5: TButton;<br />
+ Button6: TButton;<br />
+ Button7: TButton;<br />
+ Button8: TButton;<br />
+ Button9: TButton;<br />
+ Button10: TButton;<br />
+ Button11: TButton;<br />
+ Button12: TButton;<br />
+ Button13: TButton;<br />
+ Button14: TButton;<br />
+ Button15: TButton;<br />
+ Button16: TButton;<br />
+ Button17: TButton;<br />
+ Button18: TButton;<br />
+ Button19: TButton;<br />
+ Button20: TButton;<br />
+ Button21: TButton;<br />
+ Button22: TButton;<br />
+ Button23: TButton;<br />
+ Button24: TButton;<br />
+ Button25: TButton;<br />
+ Button26: TButton;<br />
+ Button27: TButton;<br />
+ Button28: TButton;<br />
+ Button29: TButton;<br />
+ Edit2: TEdit;<br />
+ Button30: TButton;<br />
+ procedure Button30Click(Sender: TObject);<br />
+ procedure FormCreate(Sender: TObject);<br />
+ procedure Button13Click(Sender: TObject);<br />
+ procedure Button14Click(Sender: TObject);<br />
+ procedure Button29Click(Sender: TObject);<br />
+ procedure Button28Click(Sender: TObject);<br />
+ procedure Button27Click(Sender: TObject);<br />
+ procedure Button26Click(Sender: TObject);<br />
+ procedure Button25Click(Sender: TObject);<br />
+ procedure Button24Click(Sender: TObject);<br />
+ procedure Button23Click(Sender: TObject);<br />
+ procedure Button22Click(Sender: TObject);<br />
+ procedure Button16Click(Sender: TObject);<br />
+ procedure Button15Click(Sender: TObject);<br />
+ procedure Button21Click(Sender: TObject);<br />
+ procedure Button20Click(Sender: TObject);<br />
+ procedure Button19Click(Sender: TObject);<br />
+ procedure Button18Click(Sender: TObject);<br />
+ procedure Button17Click(Sender: TObject);<br />
+ procedure Button12Click(Sender: TObject);<br />
+ procedure Button11Click(Sender: TObject);<br />
+ procedure Button10Click(Sender: TObject);<br />
+ procedure Button9Click(Sender: TObject);<br />
+ procedure Button1Click(Sender: TObject);<br />
+ procedure Button2Click(Sender: TObject);<br />
+ procedure Button3Click(Sender: TObject);<br />
+ procedure Button4Click(Sender: TObject);<br />
+ procedure Button5Click(Sender: TObject);<br />
+ procedure Button6Click(Sender: TObject);<br />
+ procedure Button7Click(Sender: TObject);<br />
+ procedure Button8Click(Sender: TObject);<br />
+ private<br />
+ { Private declarations }<br />
+ id1,id2 : integer;<br />
+ procedure WMHotKey(var Msg: TWMHotKey); message WM_HOTKEY;<br />
+ public<br />
+ { Public declarations }<br />
+ procedure skreenshot;<br />
+ procedure otladka;<br />
+ procedure analizkarti;<br />
+ procedure analizloki;<br />
+ function lag():boolean;<br />
+ procedure wait;<br />
+ procedure cikl;<br />
+ function battle():boolean;<br />
+ procedure vis(num : integer);<br />
+ procedure perehod(num : integer);<br />
+ procedure perehodU;//(var num : integer);<br />
+ procedure fire;<br />
+ end;</p>
+
+<p>var<br />
+ Form1: TForm1;<br />
+ mnkv : array[1..4] of boolean;<br />
+ map : array [0..24,0..17] of integer;<br />
+ map2 : array [0..24,0..17] of integer;<br />
+ KorMapX : array [0..24,0..17] of integer;<br />
+ KorMapY : array [0..24,0..17] of integer;<br />
+ KmapXn,KmapYn,KmapXk,KmapYk,KmapXs,KmapYs: integer;<br />
+ TbattleX,TBattleY,TsX,TsY,kolcikl,ProtX,ProtY : integer;<br />
+ TmpKordX,TmpKordY,norm,normB : integer;<br />
+ VisKordm1x,VisKordm2x,VisKordm3x,VisKordm4x: integer;<br />
+ VisKordm1y,VisKordm2y,VisKordm3y,VisKordm4y: integer;<br />
+ ppc1x,ppc1y,ppc2x,ppc2y,ppc3x,ppc3y,ppc4x,ppc4y : integer;<br />
+ ii,jj,qq,toX,toY,to1X,to1Y,numkv : integer;<br />
+ NumKvFokus,NumKvPers : integer;<br />
+ nullkordx, nullkordy : integer;<br />
+ GeksKordXk1,GeksKordXk2,GeksKordXk3,GeksKordXk4: integer;<br />
+ GeksKordYk1,GeksKordYk2,GeksKordYk3,GeksKordYk4: integer;<br />
+ GeksKord1xk1,GeksKord1yk1: integer;<br />
+ GeksKord1xk2,GeksKord1yk2: integer;<br />
+ GeksKord1xk3,GeksKord1yk3: integer;<br />
+ GeksKord1xk4,GeksKord1yk4: integer;<br />
+ kolhod,gt2,okh,zadF : integer;<br />
+ implementation</p>
+
+<p>{$R *.dfm}<br />
+procedure TForm1.WMHotKey(var Msg: TWMHotKey);<br />
+var<br />
+ kc : integer;<br />
+ foo: TPoint;<br />
+begin<br />
+ if Msg.HotKey = id1 then<br />
+ begin<br />
+ for kc := 1 to kolcikl do cikl;<br />
+ end;</p>
+
+<p> if Msg.HotKey = id2 then<br />
+ begin<br />
+ GetCursorPos(foo);<br />
+ TmpKordX := foo.X;<br />
+ TmpKordY := foo.Y;<br />
+ exit;<br />
+ end;<br />
+ sleep(3000);<br />
+ keybd_event(116, 0, 0, 0);<br />
+ keybd_event(116, 0, KEYEVENTF_KEYUP, 0);<br />
+ sleep(3000);</p>
+
+<p>end;</p>
+
+<p>procedure TForm1.skreenshot;<br />
+var<br />
+ DC: HDC;<br />
+ Canva: TCanvas;<br />
+ B: TBitmap;<br />
+begin<br />
+Canva := TCanvas.Create;<br />
+ B := TBitmap.Create;<br />
+ DC := GetDC(0);<br />
+ try<br />
+ Canva.Handle := DC;<br />
+ with Screen do<br />
+ begin<br />
+ B.Width := Width;<br />
+ B.Height := Height;<br />
+ B.Canvas.CopyRect(Rect(0, 0, Width, Height),<br />
+ Canva, Rect(0, 0, Width, Height));<br />
+ end<br />
+ finally<br />
+ ReleaseDC(0, DC);<br />
+ Canva.Free<br />
+ end;<br />
+ image1.Picture.Bitmap := b;<br />
+ b.Free;<br />
+end;</p>
+
+<p>procedure TForm1.wait;<br />
+var<br />
+n:integer;<br />
+begin<br />
+ for n := 1 to 1000 do<br />
+ begin<br />
+ if lag then<br />
+ begin<br />
+ sleep(200);<br />
+ keybd_event(27, 0, 0, 0);<br />
+ keybd_event(27, 0, KEYEVENTF_KEYUP, 0);<br />
+ sleep(50);<br />
+ keybd_event(VK_BACK, 0, 0, 0);<br />
+ keybd_event(VK_BACK, 0, KEYEVENTF_KEYUP, 0);<br />
+ end else<br />
+ begin<br />
+ break;<br />
+ end;<br />
+ end;<br />
+end;</p>
+
+<p>function Tform1.lag():boolean;<br />
+begin<br />
+ skreenshot;<br />
+ if Image1.Picture.Bitmap.Canvas.Pixels[ProtX,ProtY] = norm then<br />
+ begin<br />
+ result := false;<br />
+ end else<br />
+ begin<br />
+ result := true;<br />
+ end;<br />
+end;</p>
+
+<p>function TForm1.battle():boolean;<br />
+begin<br />
+ skreenshot;<br />
+ if Image1.Picture.Bitmap.Canvas.Pixels[TBattleX,TBattleY] = normB then<br />
+ begin<br />
+ result := true;<br />
+ end else<br />
+ begin<br />
+ result := false;<br />
+ end;<br />
+end;</p>
+
+<p>procedure TForm1.otladka;<br />
+begin<br />
+ if (okh >= 35) and (okh <= 69) then<br />
+ begin<br />
+ vis(1);<br />
+ end;<br />
+ if (okh >= 70) and (okh <= 109) then<br />
+ begin<br />
+ vis(2);<br />
+ end;<br />
+ if (okh >= 110) and (okh <= 149) then<br />
+ begin<br />
+ vis(3);<br />
+ end;<br />
+ if (okh >= 150) and (okh <= 160) then<br />
+ begin<br />
+ vis(4);<br />
+ end;<br />
+ if (okh = 35) or (okh = 70) or (okh = 110) or (okh = 150) then<br />
+ begin<br />
+ for ii := 4 to 17 do<br />
+ begin<br />
+ for jj := 4 to 24 do<br />
+ begin<br />
+ if map2[jj,ii] = 1 then<br />
+ begin<br />
+ sleep(300);<br />
+ SetCursorPos(KorMapX[ii,jj],KorMapY[ii,jj]);<br />
+ keybd_event(vk_Shift, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ keybd_event(vk_Shift, 0, KEYEVENTF_KEYUP, 0);<br />
+ sleep(1000);<br />
+ exit;<br />
+ end;<br />
+ end;<br />
+ end;<br />
+ end;</p>
+
+<p> if (okh = 42) or (okh = 80) or (okh = 120) or (okh = 160) then<br />
+ begin<br />
+ for ii := 4 to 17 do<br />
+ begin<br />
+ for jj := 19 to 24 do<br />
+ begin<br />
+ if map2[jj,ii] = 1 then<br />
+ begin<br />
+ sleep(300);<br />
+ SetCursorPos(KorMapX[ii,jj],KorMapY[ii,jj]);<br />
+ keybd_event(vk_Shift, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ keybd_event(vk_Shift, 0, KEYEVENTF_KEYUP, 0);<br />
+ sleep(1000);<br />
+ exit;<br />
+ end;<br />
+ end;<br />
+ end;<br />
+ end;</p>
+
+<p> if (okh = 50) or (okh = 90) or (okh = 130) or (okh = 170) then<br />
+ begin<br />
+ for ii := 13 to 17 do<br />
+ begin<br />
+ for jj := 4 to 24 do<br />
+ begin<br />
+ if map2[jj,ii] = 1 then<br />
+ begin<br />
+ sleep(300);<br />
+ SetCursorPos(KorMapX[ii,jj],KorMapY[ii,jj]);<br />
+ keybd_event(vk_Shift, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ keybd_event(vk_Shift, 0, KEYEVENTF_KEYUP, 0);<br />
+ sleep(1000);<br />
+ exit;<br />
+ end;<br />
+ end;<br />
+ end;<br />
+ end;</p>
+
+<p> if (okh = 60) or (okh = 100) or (okh = 140) or (okh = 180) then<br />
+ begin<br />
+ for ii := 13 to 17 do<br />
+ begin<br />
+ for jj := 18 to 24 do<br />
+ begin<br />
+ if map2[jj,ii] = 1 then<br />
+ begin<br />
+ sleep(300);<br />
+ SetCursorPos(KorMapX[ii,jj],KorMapY[ii,jj]);<br />
+ keybd_event(vk_Shift, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ keybd_event(vk_Shift, 0, KEYEVENTF_KEYUP, 0);<br />
+ sleep(1000);<br />
+ exit;<br />
+ end;<br />
+ end;<br />
+ end;<br />
+ end;</p>
+
+<p>end;</p>
+
+<p>procedure TForm1.cikl;<br />
+var<br />
+i : integer;<br />
+begin<br />
+ for i := 1 to kolcikl do<br />
+ begin<br />
+ if battle = false then<br />
+ begin<br />
+ keybd_event(ord('X'), 0, 0, 0);<br />
+ keybd_event(ord('X'), 0, KEYEVENTF_KEYUP, 0);<br />
+ wait;<br />
+ okh := 0;<br />
+ sleep(5000);<br />
+ SetCursorPos(TsX,TsY);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ SetCursorPos(TsX,TsY-100);<br />
+ sleep(3000);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ end;<br />
+ perehod(3);<br />
+ analizkarti;<br />
+ if NumKvPers = 0 then NumKvFokus := 3;//???</p>
+
+<p> while battle = false do<br />
+ begin<br />
+ while mnkv[NumKvFokus] do<br />
+ begin<br />
+ fire;<br />
+ analizkarti;<br />
+ otladka;<br />
+ end;<br />
+ perehodU;<br />
+ analizkarti;<br />
+ end;</p>
+
+<p> keybd_event(ord('D'), 0, 0, 0);<br />
+ keybd_event(ord('D'), 0, KEYEVENTF_KEYUP, 0);<br />
+ wait;<br />
+ sleep(2000);<br />
+ keybd_event(ord('U'), 0, 0, 0);<br />
+ keybd_event(ord('U'), 0, KEYEVENTF_KEYUP, 0);<br />
+ sleep(2000);<br />
+ keybd_event(ord('Z'), 0, 0, 0);<br />
+ keybd_event(ord('Z'), 0, KEYEVENTF_KEYUP, 0);<br />
+ // Возможно нужно будет продтверждать выходи из боя, иил выполнять действия чтоб убрать батлу<br />
+ end;<br />
+end;</p>
+
+<p>procedure TForm1.analizkarti;<br />
+var<br />
+ iks,ygr : integer;<br />
+begin<br />
+ skreenshot;<br />
+ numkvpers :=0;<br />
+ mnkv[1]:=false;<br />
+ mnkv[2]:=false;<br />
+ mnkv[3]:=false;<br />
+ mnkv[4]:=false;<br />
+ iks := KmapXn;<br />
+ ygr := KmapYn;<br />
+ {Поиск героя}<br />
+{квадрат 1}<br />
+ while ygr <= KmapYs do<br />
+ begin<br />
+ while iks <= KmapXs do<br />
+ begin<br />
+ if Image1.Picture.Bitmap.Canvas.Pixels[iks,ygr] = 16777215 then<br />
+ begin<br />
+ numkvpers :=1;<br />
+ break; //2928382 16777215<br />
+ end;<br />
+ iks := iks + 1;<br />
+ end;<br />
+ iks := KmapXn;<br />
+ ygr := ygr + 1;<br />
+ end;<br />
+ iks := KmapXs;<br />
+ ygr := KmapYn;<br />
+{квадрат 2}<br />
+ while ygr <= KmapYs do<br />
+ begin<br />
+ while iks <= KmapXk do<br />
+ begin<br />
+ if Image1.Picture.Bitmap.Canvas.Pixels[iks,ygr] = 16777215 then<br />
+ begin<br />
+ numkvpers :=2;<br />
+ break; //2928382 16777215<br />
+ end;<br />
+ iks := iks + 1;<br />
+ end;<br />
+ iks := KmapXs;<br />
+ ygr := ygr + 1;<br />
+ end;<br />
+ iks := KmapXs;<br />
+ ygr := KmapYs;<br />
+{квадрат 3}<br />
+ while ygr <= KmapYk do<br />
+ begin<br />
+ while iks <= KmapXk do<br />
+ begin<br />
+ if Image1.Picture.Bitmap.Canvas.Pixels[iks,ygr] = 16777215 then<br />
+ begin<br />
+ numkvpers :=3;<br />
+ break; //2928382 16777215<br />
+ end;<br />
+ iks := iks + 1;<br />
+ end;<br />
+ iks := KmapXn;<br />
+ ygr := ygr + 1;<br />
+ end;<br />
+ iks := KmapXn;<br />
+ ygr := KmapYs;<br />
+{квадрат 4}<br />
+ while ygr <= KmapYk do<br />
+ begin<br />
+ while iks <= KmapXs do<br />
+ begin<br />
+ if Image1.Picture.Bitmap.Canvas.Pixels[iks,ygr] = 16777215 then<br />
+ begin<br />
+ numkvpers :=4;<br />
+ break; //2928382 16777215<br />
+ end;<br />
+ iks := iks + 1;<br />
+ end;<br />
+ iks := KmapXn;<br />
+ ygr := ygr + 1;<br />
+ end;<br />
+ {Поиск мобов}<br />
+{квадрат 1}<br />
+ iks := KmapXn;<br />
+ ygr := KmapYn;<br />
+ while ygr <= KmapYs do<br />
+ begin<br />
+ while iks <= KmapXs do<br />
+ begin<br />
+ if Image1.Picture.Bitmap.Canvas.Pixels[iks,ygr] = 2928382 then<br />
+ begin<br />
+ mnkv[1] := true;<br />
+ break; //2928382 16777215<br />
+ end;<br />
+ iks := iks + 1;<br />
+ end;<br />
+ iks := KmapXn;<br />
+ ygr := ygr + 1;<br />
+ end;<br />
+ iks := KmapXs;<br />
+ ygr := KmapYn;<br />
+{квадрат 2}<br />
+ while ygr <= KmapYs do<br />
+ begin<br />
+ while iks <= KmapXk do<br />
+ begin<br />
+ if Image1.Picture.Bitmap.Canvas.Pixels[iks,ygr] = 2928382 then<br />
+ begin<br />
+ mnkv[2] := true;<br />
+ break; //2928382 16777215<br />
+ end;<br />
+ iks := iks + 1;<br />
+ end;<br />
+ iks := KmapXs;<br />
+ ygr := ygr + 1;<br />
+ end;<br />
+ iks := KmapXs;<br />
+ ygr := KmapYs;<br />
+{квадрат 3}<br />
+ while ygr <= KmapYk do<br />
+ begin<br />
+ while iks <= KmapXk do<br />
+ begin<br />
+ if Image1.Picture.Bitmap.Canvas.Pixels[iks,ygr] = 2928382 then<br />
+ begin<br />
+ mnkv[3] := true;<br />
+ break; //2928382 16777215<br />
+ end;<br />
+ iks := iks + 1;<br />
+ end;<br />
+ iks := KmapXn;<br />
+ ygr := ygr + 1;<br />
+ end;<br />
+ iks := KmapXn;<br />
+ ygr := KmapYs;<br />
+{квадрат 4}<br />
+ while ygr <= KmapYk do<br />
+ begin<br />
+ while iks <= KmapXs do<br />
+ begin<br />
+ if Image1.Picture.Bitmap.Canvas.Pixels[iks,ygr] = 2928382 then<br />
+ begin<br />
+ mnkv[4] := true;<br />
+ break; //2928382 16777215<br />
+ end;<br />
+ iks := iks + 1;<br />
+ end;<br />
+ iks := KmapXn;<br />
+ ygr := ygr + 1;<br />
+ end;<br />
+ if numkvpers <> 0 then NumKvFokus := numkvpers;<br />
+ sleep(1);<br />
+end;</p>
+
+<p>procedure TForm1.analizloki;<br />
+var<br />
+ q,w,tm,i,j,ix,jx,NumKvX,NumKvY,nkx,nky,n,jnull,inull : integer;<br />
+ xyi,jaw : boolean;<br />
+begin<br />
+ n:=0;<br />
+ //b1 := Image1.Picture.Bitmap;<br />
+ xyi := false;<br />
+ jaw := false;<br />
+ if numkv = 1 then<br />
+ begin<br />
+ nullkordx := GeksKordXk1;<br />
+ nullkordy := GeksKordYk1;<br />
+ end;</p>
+
+<p> if numkv = 2 then<br />
+ begin<br />
+ nullkordx := GeksKordXk2;<br />
+ nullkordy := GeksKordYk2;<br />
+ end;</p>
+
+<p> if numkv = 3 then<br />
+ begin<br />
+ nullkordx := GeksKordXk3;<br />
+ nullkordy := GeksKordYk3;<br />
+ end;</p>
+
+<p> if numkv = 4 then<br />
+ begin<br />
+ nullkordx := GeksKordXk4;<br />
+ nullkordy := GeksKordYk4;<br />
+ end;</p>
+
+<p> NumKvX := 24;<br />
+ NumKvY := 17;<br />
+ nkx:=0;<br />
+ nky:=0;<br />
+ i:=nullkordy;//y<br />
+ j:=nullkordx;//x<br />
+ ix:=nullkordy;//y<br />
+ jx:=nullkordx;//x<br />
+ jnull:=nullkordx;<br />
+ inull:=nullkordy;</p>
+
+<p> for q := 0 to 17 do<br />
+ begin<br />
+ for w := 0 to 24 do<br />
+ begin<br />
+ map[w,q] := 0;<br />
+ end;<br />
+ end;</p>
+
+<p> for q := 0 to 17 do<br />
+ begin<br />
+ for w := 0 to 24 do<br />
+ begin<br />
+ map2[w,q] := 1;<br />
+ end;<br />
+ end;</p>
+
+<p> while nky <= NumKvY do<br />
+ begin<br />
+ while nkx <= NumKvX do<br />
+ begin<br />
+ while i <= ix+10 do<br />
+ begin<br />
+ while j <= jx+22 do<br />
+ begin<br />
+ tm := Image1.Picture.Bitmap.Canvas.Pixels[j,i];<br />
+ if tm = 0 then<br />
+ begin<br />
+ n := n+1;<br />
+ end;<br />
+ if tm = 4225757 then<br />
+ begin<br />
+ xyi := true;<br />
+ end;<br />
+ if (tm = 3361894) {or (tm = 3361894) or (tm = 3361894)} then<br />
+ begin<br />
+ jaw := true;<br />
+ end;</p>
+
+<p> j:=j+1;<br />
+ end;<br />
+ j:=jx;<br />
+ i:=i+1;<br />
+ end;<br />
+ map[NKx,NKy] := n;<br />
+ if xyi then map[NKx,NKy] := 1001;<br />
+ if jaw then map[NKx,NKy] := 2001;<br />
+ jaw := false;<br />
+ xyi := false;<br />
+ KorMapX [NKx,NKy] := j+15;<br />
+ KorMapY [NKx,NKy] := i-9;<br />
+ n:=0;<br />
+ i := ix;<br />
+ jx := jx + 36;<br />
+ j := jx;<br />
+ nkx:=nkx+1;<br />
+ end;<br />
+ nkx:=0;<br />
+ nky:=nky+1;<br />
+ ix := ix +19;<br />
+ i := ix;<br />
+ if nky mod(2) = 0 then<br />
+ begin<br />
+ jx := jnull;<br />
+ j := jx;<br />
+ end else<br />
+ begin<br />
+ jx := jnull+18;<br />
+ j := jx+18;<br />
+ end;</p>
+
+<p> end;<br />
+{определение мобов или полносьтю закрытых гексов}<br />
+ for q := 0 to 17 do<br />
+ begin //??<br />
+ for w := 0 to 24 do<br />
+ begin<br />
+ if map[w,q] <= 2 then<br />
+ begin<br />
+ map2[w,q] := 0;<br />
+ end;<br />
+ end;<br />
+ end;</p>
+
+<p>{определение полностью свободных гексов}<br />
+ for q := 0 to 17 do<br />
+ begin //??<br />
+ for w := 0 to 24 do<br />
+ begin<br />
+ if (map[w,q] >= 28) and (map[w,q] <=100) then<br />
+ begin<br />
+ map2[w,q] := 1;<br />
+ end;<br />
+ end;<br />
+ end;</p>
+
+<p>{определение сомнительных гексов}<br />
+ for q := 0 to 17 do<br />
+ begin //??<br />
+ for w := 0 to 24 do<br />
+ begin<br />
+ if (map[w,q] >=3) and (map[w,q] <=27) then<br />
+ begin<br />
+ map2[w,q] := 2;<br />
+ end;<br />
+ end;<br />
+ end;<br />
+ {мусорная херня}<br />
+ for q := 0 to 17 do<br />
+ begin //??<br />
+ for w := 0 to 24 do<br />
+ begin<br />
+ if (map[w,q] >= 1000) and (map[w,q] >= 2000) then<br />
+ begin<br />
+ map2[w,q] := 1;<br />
+ end;<br />
+ end;<br />
+ end;<br />
+ {ящик}<br />
+ for q := 0 to 17 do<br />
+ begin //??<br />
+ for w := 0 to 24 do<br />
+ begin<br />
+ if map[w,q] >= 2000 then<br />
+ begin<br />
+ map2[w,q] := 4;<br />
+ end;<br />
+ end;<br />
+ end;<br />
+sleep(1);<br />
+ for q := 11 to 17 do<br />
+ begin<br />
+ for w := 0 to 2 do<br />
+ begin<br />
+ map2[w,q] := 3;<br />
+ end;<br />
+ end;</p>
+
+<p> q := 17;<br />
+ for w := 0 to 24 do<br />
+ begin<br />
+ map2[w,q] := 3;<br />
+ end;</p>
+
+<p>end;</p>
+
+<p>procedure Tform1.vis(num : integer);<br />
+begin<br />
+ if num = 1 then<br />
+ begin<br />
+ SetCursorPos(VisKordm1x, VisKordm1y);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ sleep(100);<br />
+ SetCursorPos(ppc1x, ppc1y);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ SetCursorPos(ppc1x+201, ppc1y+201);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ numkv:= 1;<br />
+ sleep(750);<br />
+ SetCursorPos(0,0);<br />
+ end;<br />
+ if num = 2 then<br />
+ begin<br />
+ SetCursorPos(VisKordm2x, VisKordm2y);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ sleep(100);<br />
+ SetCursorPos(ppc2x, ppc2y);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ SetCursorPos(ppc2x-100, ppc2y+100);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ numkv:= 2;<br />
+ sleep(750);<br />
+ SetCursorPos(0,0);<br />
+ end;<br />
+ if num = 3 then<br />
+ begin<br />
+ SetCursorPos(VisKordm3x, VisKordm3y);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ sleep(100);<br />
+ SetCursorPos(ppc3x, ppc3y);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ SetCursorPos(ppc3x-100, ppc3y-100);;<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ numkv:= 3;<br />
+ sleep(750);<br />
+ SetCursorPos(0,0);<br />
+ end;<br />
+ if num = 4 then<br />
+ begin<br />
+ SetCursorPos(VisKordm4x, VisKordm4y);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ sleep(100);<br />
+ SetCursorPos(ppc4x, ppc4y);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ SetCursorPos(ppc4x+100, ppc4y-100);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ numkv:= 4;<br />
+ sleep(750);<br />
+ SetCursorPos(0,0);<br />
+ end;<br />
+end;</p>
+
+<p>procedure TForm1.perehodU;<br />
+begin<br />
+ analizkarti;<br />
+ if NumKvFokus mod(2) = 0 then<br />
+ begin<br />
+ if mnkv[1] then<br />
+ begin<br />
+ perehod(1);<br />
+ exit;<br />
+ end;<br />
+ if mnkv[3] then<br />
+ begin<br />
+ perehod(3);<br />
+ exit;<br />
+ end;<br />
+ if mnkv[2] then<br />
+ begin<br />
+ perehod(2);<br />
+ exit;<br />
+ end;<br />
+ if mnkv[4] then<br />
+ begin<br />
+ perehod(4);<br />
+ exit;<br />
+ end;<br />
+ end else<br />
+ begin<br />
+ if mnkv[2] then<br />
+ begin<br />
+ perehod(2);<br />
+ exit;<br />
+ end;<br />
+ if mnkv[4] then<br />
+ begin<br />
+ perehod(4);<br />
+ exit;<br />
+ end;<br />
+ if mnkv[1] then<br />
+ begin<br />
+ perehod(1);<br />
+ exit;<br />
+ end;<br />
+ if mnkv[3] then<br />
+ begin<br />
+ perehod(3);<br />
+ exit;<br />
+ end;<br />
+ end;<br />
+end;</p>
+
+<p>procedure TForm1.fire;<br />
+var<br />
+ q,w,res :integer;<br />
+begin<br />
+ vis(NumKvFokus);<br />
+ analizloki;<br />
+ wait;<br />
+ sleep(100);<br />
+ SetCursorPos(0,0);<br />
+ keybd_event(ord('U'), 0, 0, 0);<br />
+ keybd_event(ord('U'), 0, KEYEVENTF_KEYUP, 0);<br />
+ sleep(600);<br />
+ SetCursorPos(toX,toY);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ sleep(300);<br />
+ SetCursorPos(to1X,to1Y);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ SetCursorPos(0,0);<br />
+ sleep(400);<br />
+ keybd_event(ord('3'), 0, 0, 0);<br />
+ keybd_event(ord('3'), 0, KEYEVENTF_KEYUP, 0);<br />
+ sleep(300);<br />
+ sleep(100);<br />
+ SetCursorPos(0,0);<br />
+ keybd_event(ord('R'), 0, 0, 0);<br />
+ keybd_event(ord('R'), 0, KEYEVENTF_KEYUP, 0);<br />
+ sleep(500);<br />
+ res:=0;</p>
+
+<p> if (okh = 15) or (okh = 30) or (okh = 45) or (okh = 60) or (okh = 75) or (okh = 90) then<br />
+ begin<br />
+ sleep(200);<br />
+ SetCursorPos(KorMapX[10,15],KorMapY[10,15]);<br />
+ keybd_event(vk_control, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ keybd_event(vk_control, 0, KEYEVENTF_KEYUP, 0);<br />
+ end;</p>
+
+<p> for q := 0 to 24 do<br />
+ begin<br />
+ wait;<br />
+ for w := 0 to 17 do<br />
+ begin<br />
+ if map2[q,w] <> 3 then<br />
+ begin<br />
+ if map2[q,w] = 0 then<br />
+ begin<br />
+{ if res >= 10 then<br />
+ begin<br />
+ sleep(100);<br />
+ SetCursorPos(0,0);<br />
+ keybd_event(ord('R'), 0, 0, 0);<br />
+ keybd_event(ord('R'), 0, KEYEVENTF_KEYUP, 0);<br />
+ sleep(500);<br />
+ res:=0;<br />
+ end;}<br />
+ res:= res+1;<br />
+ sleep(50);<br />
+ SetCursorPos(KorMapX[q,w],KorMapY[q,w]);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ end;<br />
+ end;<br />
+ end;<br />
+ end;<br />
+ sleep(ZadF);<br />
+ keybd_event(ord('D'), 0, 0, 0);<br />
+ keybd_event(ord('D'), 0, KEYEVENTF_KEYUP, 0);<br />
+ okh := okh + 1;<br />
+ wait;<br />
+ sleep(200); /////////////////////////////??????????????????<br />
+end;</p>
+
+<p>procedure TForm1.FormCreate(Sender: TObject);<br />
+begin<br />
+ id1 := GlobalAddAtom('Hotkey1');<br />
+ RegisterHotKey(Handle, id1, 0, ord('G'));</p>
+
+<p> id2 := GlobalAddAtom('Hotkey2');<br />
+ RegisterHotKey(Handle, id2, 0, ord('Q'));</p>
+
+<p> kolcikl := 1;<br />
+ kolhod := 2;<br />
+ zadF := 1400;<br />
+end;</p>
+
+<p>procedure TForm1.perehod(num : integer);<br />
+begin<br />
+ vis(num);<br />
+ analizloki;<br />
+ for ii := 6 to 17 do<br />
+ begin<br />
+ for jj := 13 to 24 do<br />
+ begin<br />
+ if map2[jj,ii] = 1 then<br />
+ begin<br />
+ sleep(100);<br />
+ SetCursorPos(KorMapX[jj,ii],KorMapY[jj,ii]);<br />
+ sleep(100);<br />
+ keybd_event(vk_Shift, 0, 0, 0);<br />
+ sleep(100);<br />
+ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);<br />
+ mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);<br />
+ keybd_event(vk_Shift, 0, KEYEVENTF_KEYUP, 0);<br />
+ wait;<br />
+ for qq:= 1 to kolhod do<br />
+ begin<br />
+ wait;<br />
+ keybd_event(ord('D'), 0, 0, 0);<br />
+ keybd_event(ord('D'), 0, KEYEVENTF_KEYUP, 0);<br />
+ sleep(2000);<br />
+ wait;<br />
+ end;<br />
+ sleep(1000);<br />
+ keybd_event(ord('D'), 0, 0, 0);<br />
+ keybd_event(ord('D'), 0, KEYEVENTF_KEYUP, 0);<br />
+ sleep(1000);<br />
+ wait;<br />
+ exit;<br />
+ end;<br />
+ end;<br />
+ end;<br />
+end;<br />
+{<br />
+=======================================<br />
+}<br />
+procedure TForm1.Button10Click(Sender: TObject);<br />
+begin<br />
+ GeksKord1xk2 := TmpKordX;<br />
+ GeksKord1yk2 := TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(GeksKord1xk2));<br />
+ memo1.Lines.SaveToFile('GeksKord1xk2');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(GeksKord1yk2));<br />
+ memo1.Lines.SaveToFile('GeksKord1yk2');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button11Click(Sender: TObject);<br />
+begin<br />
+ GeksKord1xk3 := TmpKordX;<br />
+ GeksKord1yk3 := TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(GeksKord1xk3));<br />
+ memo1.Lines.SaveToFile('GeksKord1xk3');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(GeksKord1yk3));<br />
+ memo1.Lines.SaveToFile('GeksKord1yk3');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button12Click(Sender: TObject);<br />
+begin<br />
+ GeksKord1xk4 := TmpKordX;<br />
+ GeksKord1yk4 := TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(GeksKord1xk4));<br />
+ memo1.Lines.SaveToFile('GeksKord1xk4');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(GeksKord1yk4));<br />
+ memo1.Lines.SaveToFile('GeksKord1yk4');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button13Click(Sender: TObject);<br />
+begin<br />
+ ProtX := TmpKordX;<br />
+ ProtY := TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(ProtX));<br />
+ memo1.Lines.SaveToFile('ProtX');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(ProtY));<br />
+ memo1.Lines.SaveToFile('ProtY');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button14Click(Sender: TObject);<br />
+begin<br />
+ skreenshot;<br />
+ norm := Image1.Picture.Bitmap.Canvas.Pixels[ProtX,ProtY];<br />
+end;</p>
+
+<p>procedure TForm1.Button15Click(Sender: TObject);<br />
+begin<br />
+ toX := TmpKordX;<br />
+ toY := TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(toX));<br />
+ memo1.Lines.SaveToFile('toX');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(toY));<br />
+ memo1.Lines.SaveToFile('toY');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button16Click(Sender: TObject);<br />
+begin<br />
+ to1X := TmpKordX;<br />
+ to1Y := TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(to1X));<br />
+ memo1.Lines.SaveToFile('to1X');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(to1Y));<br />
+ memo1.Lines.SaveToFile('to1Y');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button17Click(Sender: TObject);<br />
+begin<br />
+ sleep(500);<br />
+ SetCursorPos(TsX,TsY);</p>
+
+<p> sleep(500);<br />
+ SetCursorPos(KmapXn,KmapYn);</p>
+
+<p> sleep(500);<br />
+ SetCursorPos(KmapXk,KmapYk);</p>
+
+<p> sleep(500);<br />
+ SetCursorPos(KmapXs,KmapYs);</p>
+
+<p><br />
+ sleep(500);<br />
+ SetCursorPos(VisKordm1x,VisKordm1y); //</p>
+
+<p> sleep(500);<br />
+ SetCursorPos(VisKordm2x,VisKordm2y);</p>
+
+<p> sleep(500);<br />
+ SetCursorPos(VisKordm3x,VisKordm3y);</p>
+
+<p> sleep(500);<br />
+ SetCursorPos(VisKordm4x,VisKordm4y);</p>
+
+<p> sleep(500);<br />
+ button17.Click;</p>
+
+<p> sleep(500);<br />
+ SetCursorPos(GeksKord1xk1,GeksKord1yk1);</p>
+
+<p><br />
+ sleep(500);<br />
+ button18.Click;</p>
+
+<p> sleep(500);<br />
+ SetCursorPos(GeksKord1xk2,GeksKord1yk2);</p>
+
+<p> sleep(500);<br />
+ button19.Click;</p>
+
+<p> sleep(500);<br />
+ SetCursorPos(GeksKord1xk3,GeksKord1yk3);</p>
+
+<p></p>
+
+<p> sleep(500);<br />
+ button20.Click;</p>
+
+<p> sleep(500);<br />
+ SetCursorPos(GeksKord1xk4,GeksKord1yk4);</p>
+
+<p>end;</p>
+
+<p>procedure TForm1.Button18Click(Sender: TObject);<br />
+begin<br />
+ vis(1);<br />
+end;</p>
+
+<p>procedure TForm1.Button19Click(Sender: TObject);<br />
+begin<br />
+ vis(2);<br />
+end;</p>
+
+<p>procedure TForm1.Button1Click(Sender: TObject);<br />
+begin<br />
+ memo1.Lines.Clear;<br />
+ TBattleX := TmpKordX;<br />
+ TBattleY := TmpKordY;<br />
+ memo1.Lines.Add(inttostr(TBattleX));<br />
+ memo1.Lines.SaveToFile('TBattleX');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(TBattleY));<br />
+ memo1.Lines.SaveToFile('TBattleY');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button20Click(Sender: TObject);<br />
+begin<br />
+ vis(3);<br />
+end;</p>
+
+<p>procedure TForm1.Button21Click(Sender: TObject);<br />
+begin<br />
+ vis(4);<br />
+end;</p>
+
+<p>procedure TForm1.Button22Click(Sender: TObject);<br />
+begin<br />
+ VisKordm1x := TmpKordX;<br />
+ VisKordm1y := TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(VisKordm1x));<br />
+ memo1.Lines.SaveToFile('VisKordm1x');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(VisKordm1y));<br />
+ memo1.Lines.SaveToFile('VisKordm1y');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button23Click(Sender: TObject);<br />
+begin<br />
+ VisKordm2x := TmpKordX;<br />
+ VisKordm2y := TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(VisKordm2x));<br />
+ memo1.Lines.SaveToFile('VisKordm2x');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(VisKordm2y));<br />
+ memo1.Lines.SaveToFile('VisKordm2y');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button24Click(Sender: TObject);<br />
+begin<br />
+ VisKordm3x := TmpKordX;<br />
+ VisKordm3y := TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(VisKordm3x));<br />
+ memo1.Lines.SaveToFile('VisKordm3x');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(VisKordm3y));<br />
+ memo1.Lines.SaveToFile('VisKordm3y');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button25Click(Sender: TObject);<br />
+begin<br />
+ VisKordm4x := TmpKordX;<br />
+ VisKordm4y := TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(VisKordm4x));<br />
+ memo1.Lines.SaveToFile('VisKordm4x');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(VisKordm4y));<br />
+ memo1.Lines.SaveToFile('VisKordm4y');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button26Click(Sender: TObject);<br />
+begin<br />
+ ppc1x := TmpKordX;<br />
+ ppc1y := TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(ppc1x));<br />
+ memo1.Lines.SaveToFile('ppc1x');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(ppc1y));<br />
+ memo1.Lines.SaveToFile('ppc1y');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button27Click(Sender: TObject);<br />
+begin<br />
+ ppc2x := TmpKordX;<br />
+ ppc2y := TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(ppc2x));<br />
+ memo1.Lines.SaveToFile('ppc2x');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(ppc2y));<br />
+ memo1.Lines.SaveToFile('ppc2y');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button28Click(Sender: TObject);<br />
+begin<br />
+ ppc3x := TmpKordX;<br />
+ ppc3y := TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(ppc3x));<br />
+ memo1.Lines.SaveToFile('ppc3x');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(ppc3y));<br />
+ memo1.Lines.SaveToFile('ppc3y');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button29Click(Sender: TObject);<br />
+begin<br />
+ ppc4x := TmpKordX;<br />
+ ppc4y := TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(ppc4x));<br />
+ memo1.Lines.SaveToFile('ppc4x');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(ppc4y));<br />
+ memo1.Lines.SaveToFile('ppc4y');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button2Click(Sender: TObject);<br />
+begin<br />
+ memo1.Lines.LoadFromFile('TBattleX');<br />
+ TBattleX := strtoint(memo1.Lines.Strings[0]);</p>
+
+<p> memo1.Lines.LoadFromFile('TBattleY');<br />
+ TBattleY := strtoint(memo1.Lines.Strings[0]);</p>
+
+<p> memo1.Lines.LoadFromFile('TsX');<br />
+ TsX := strtoint(memo1.Lines.Strings[0]);</p>
+
+<p> memo1.Lines.LoadFromFile('TsY');<br />
+ TsY := strtoint(memo1.Lines.Strings[0]);</p>
+
+<p>end;</p>
+
+<p>procedure TForm1.Button30Click(Sender: TObject);<br />
+begin<br />
+ zadF := strtoint(edit2.text);<br />
+end;</p>
+
+<p>procedure TForm1.Button3Click(Sender: TObject);<br />
+begin<br />
+ skreenshot;<br />
+ normB := Image1.Picture.Bitmap.Canvas.Pixels[TBattleX,TBattleY];<br />
+end;</p>
+
+<p>procedure TForm1.Button4Click(Sender: TObject);<br />
+begin<br />
+ TsX := TmpKordX;<br />
+ TsY := TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(TsX));<br />
+ memo1.Lines.SaveToFile('TsX');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(TsY));<br />
+ memo1.Lines.SaveToFile('TsY');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button5Click(Sender: TObject);<br />
+begin<br />
+ kolcikl := strtoint(edit1.text);<br />
+end;</p>
+
+<p>procedure TForm1.Button6Click(Sender: TObject);<br />
+begin<br />
+ KmapXn:=TmpKordX;<br />
+ KmapYn:=TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(KmapXn));<br />
+ memo1.Lines.SaveToFile('KmapXn');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(KmapYn));<br />
+ memo1.Lines.SaveToFile('KmapYn');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button7Click(Sender: TObject);<br />
+begin<br />
+ KmapXk:=TmpKordX;<br />
+ KmapYk:=TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(KmapXk));<br />
+ memo1.Lines.SaveToFile('KmapXk');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(KmapYk));<br />
+ memo1.Lines.SaveToFile('KmapYk');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button8Click(Sender: TObject);<br />
+var<br />
+ t1,t2,t3:Extended;<br />
+begin<br />
+ GeksKordXk1 := GeksKord1Xk1+2;<br />
+ GeksKordYk1 := GeksKord1Yk1+2;</p>
+
+<p> GeksKordXk2 := GeksKord1Xk2+2;<br />
+ GeksKordYk2 := GeksKord1Yk2+2;</p>
+
+<p> GeksKordXk3 := GeksKord1Xk3+2;<br />
+ GeksKordYk3 := GeksKord1Yk3+2;</p>
+
+<p> GeksKordXk4 := GeksKord1Xk4+2;<br />
+ GeksKordYk4 := GeksKord1Yk4+2;</p>
+
+<p>// GeksLeft := GeksKord2Xk1-2 - GeksKord1Xk1+2;<br />
+// GeksTop := GeksKord2Yk1-2 - GeksKord1Yk1+2;</p>
+
+<p> t1 := 0;<br />
+ t2 := 0;<br />
+ t3 := 0;</p>
+
+<p> t1 := ((KmapXk-KmapXn)/2);<br />
+ t2 := ((KmapYk-KmapYn)/2);<br />
+ t1 := KmapXn + t1;<br />
+ t2 := KmapYn + t2;</p>
+
+<p>// t3 := GeksTop/2;</p>
+
+<p><br />
+ try<br />
+ KmapXs := strtoint(Floattostr(t1));<br />
+ except<br />
+ t1:=t1-0.5;<br />
+ KmapXs := strtoint(Floattostr(t1));<br />
+ end;</p>
+
+<p> try<br />
+ KmapYs := strtoint(Floattostr(t2));<br />
+ except<br />
+ t2:=t2-0.5;<br />
+ KmapYs := strtoint(Floattostr(t2));<br />
+ end;</p>
+
+<p> try<br />
+ gt2 := strtoint(Floattostr(t3));<br />
+ except<br />
+ t3:=t3-0.5;<br />
+ gt2 := strtoint(Floattostr(t3));<br />
+ end;</p>
+
+<p><br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(KmapXs));<br />
+ memo1.Lines.SaveToFile('KmapXs');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(KmapYs));<br />
+ memo1.Lines.SaveToFile('KmapYs');<br />
+ memo1.Lines.Clear;</p>
+
+<p> memo1.Lines.Add(inttostr(GeksKordXk1));<br />
+ memo1.Lines.SaveToFile('GeksKordXk1');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(GeksKordYk1));<br />
+ memo1.Lines.SaveToFile('GeksKordYk1');<br />
+ memo1.Lines.Clear;</p>
+
+<p> memo1.Lines.Add(inttostr(GeksKordXk2));<br />
+ memo1.Lines.SaveToFile('GeksKordXk2');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(GeksKordYk2));<br />
+ memo1.Lines.SaveToFile('GeksKordYk2');<br />
+ memo1.Lines.Clear;</p>
+
+<p> memo1.Lines.Add(inttostr(GeksKordXk3));<br />
+ memo1.Lines.SaveToFile('GeksKordXk3');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(GeksKordYk3));<br />
+ memo1.Lines.SaveToFile('GeksKordYk3');<br />
+ memo1.Lines.Clear;</p>
+
+<p> memo1.Lines.Add(inttostr(GeksKordXk4));<br />
+ memo1.Lines.SaveToFile('GeksKordXk4');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(GeksKordYk4));<br />
+ memo1.Lines.SaveToFile('GeksKordYk4');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button9Click(Sender: TObject);<br />
+begin<br />
+ GeksKord1xk1 := TmpKordX;<br />
+ GeksKord1yk1 := TmpKordY;<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(GeksKord1xk1));<br />
+ memo1.Lines.SaveToFile('GeksKord1xk1');<br />
+ memo1.Lines.Clear;<br />
+ memo1.Lines.Add(inttostr(GeksKord1yk1));<br />
+ memo1.Lines.SaveToFile('GeksKord1yk1');<br />
+ memo1.Lines.Clear;<br />
+end;</p>
+
+<p>end.<br />
+</p>
+
+

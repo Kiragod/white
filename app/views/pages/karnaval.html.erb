@@ -1,0 +1,445 @@
+﻿<h1>Karnaval</h1>
+
+Описание:
+<br /><br />
+Система шифрования коротких сообщений до 200 символов. Каждый симовол шифруеться случайным числом для каждого возможного символа, для одного элемента массива. Для следующего элемента, а также для следующего сообщения ключ будет другим. Что делает расшифровку в отсутсвии ключа невозможной.
+<br /> <br />
+Исходный код:
+<br /> <br />
+<p>unit Unit1;</p>
+
+<p>interface</p>
+
+<p>uses<br />
+ Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,<br />
+ Dialogs, StdCtrls, ExtCtrls, Menus;</p>
+
+<p>type<br />
+ TForm1 = class(TForm)<br />
+ Memo1: TMemo;<br />
+ Label1: TLabel;<br />
+ Memo2: TMemo;<br />
+ Label2: TLabel;<br />
+ Button1: TButton;<br />
+ Button2: TButton;<br />
+ Button3: TButton;<br />
+ Edit1: TEdit;<br />
+ ComboBox1: TComboBox;<br />
+ Label3: TLabel;<br />
+ Label4: TLabel;<br />
+ Label5: TLabel;<br />
+ Button4: TButton;<br />
+ Button5: TButton;<br />
+ Edit2: TEdit;<br />
+ MainMenu1: TMainMenu;<br />
+ N1: TMenuItem;<br />
+ N2: TMenuItem;<br />
+ Image1: TImage;<br />
+ Button7: TButton;<br />
+ Edit3: TEdit;<br />
+ Edit4: TEdit;<br />
+ Button6: TButton;<br />
+ Memo3: TMemo;<br />
+ Button8: TButton;<br />
+ procedure Button8Click(Sender: TObject);<br />
+ procedure Button3Click(Sender: TObject);<br />
+ procedure Button4Click(Sender: TObject);<br />
+ procedure ComboBox1DropDown(Sender: TObject);<br />
+ procedure FormCreate(Sender: TObject);<br />
+ procedure Button7Click(Sender: TObject);<br />
+ procedure Button5Click(Sender: TObject);<br />
+ procedure Button6Click(Sender: TObject);<br />
+ procedure Button1Click(Sender: TObject);<br />
+ procedure Button2Click(Sender: TObject);<br />
+ procedure N2Click(Sender: TObject);<br />
+ private<br />
+ { Private declarations }<br />
+ public<br />
+ { Public declarations }<br />
+ procedure zashifrovka;<br />
+ procedure rashifrovka;<br />
+ procedure sozdanie;</p>
+
+<p> end;</p>
+
+<p>var<br />
+ Form1: TForm1;<br />
+ ish : array [1..201] of string;<br />
+ zas : array [1..201] of integer;<br />
+ shifr : array [1..201,32..255] of integer;<br />
+ NumKU : integer;<br />
+implementation</p>
+
+<p>{$R *.dfm}</p>
+
+<p>procedure TForm1.sozdanie;<br />
+var<br />
+ i,j,q,w,tmp : integer;<br />
+ fail: boolean;<br />
+ F: TextFile;<br />
+begin<br />
+randomize;<br />
+try<br />
+ for w := 1 to strtoint(edit1.Text) do<br />
+ begin<br />
+ for i := 1 to 200 do<br />
+ begin<br />
+ for j := 32 to 255 do<br />
+ begin<br />
+ shifr[i,j] := random(10000);<br />
+ end;<br />
+ end;</p>
+
+<p> while fail do<br />
+ begin<br />
+ fail := false;<br />
+ for i := 1 to 200 do<br />
+ begin<br />
+ for j := 32 to 255 do<br />
+ begin<br />
+ tmp := shifr[i,j];<br />
+ q := 32;<br />
+ while q <= 255 do<br />
+ begin<br />
+ if q = j then q := q + 1;<br />
+ if shifr[i,q] = tmp then<br />
+ begin<br />
+ fail := true;<br />
+ shifr[i,q]:= random(10000);<br />
+ end;<br />
+ q := q+1;<br />
+ end;<br />
+ end;<br />
+ end;<br />
+ end;<br />
+ CreateDir('unkoder');<br />
+ AssignFile(F, 'unkoder\shf'+inttostr(w)+'.txt');<br />
+ ReWrite(f);</p>
+
+<p> for i := 1 to 200 do<br />
+ begin<br />
+ for j := 32 to 255 do<br />
+ begin<br />
+ Write(F, inttostr(shifr[i,j]));<br />
+ Write(F, ' ');<br />
+ end;<br />
+ end;</p>
+
+<p> CloseFile(f);<br />
+ end;<br />
+except<br />
+ showmessage('Некорректно введено кол-во юзов K/U');<br />
+end;</p>
+
+<p> memo2.Lines.Clear;<br />
+ memo2.Lines.Add('1');<br />
+ memo2.Lines.SaveToFile(Combobox1.Text +'num.txt');<br />
+ sleep(1);</p>
+
+<p>end;</p>
+
+<p>procedure TForm1.zashifrovka;<br />
+var<br />
+ i,j,por,numer : integer;<br />
+ F,ff: TextFile;<br />
+ tmp,tmps,ppc : string;<br />
+begin</p>
+
+<p> try<br />
+ memo3.Lines.LoadFromFile(combobox1.Text +'num'+'.txt');<br />
+ except<br />
+ memo3.Lines.Add('1');<br />
+ memo3.Lines.SaveToFile(combobox1.Text +'num'+'.txt');<br />
+ end;<br />
+ numer := strtoint(memo3.Lines.Strings[0]);<br />
+ numer := numer + 1;<br />
+ memo3.Lines.Clear;<br />
+ memo3.Lines.Add(inttostr(numer));<br />
+ memo3.Lines.savetofile(combobox1.Text +'num'+'.txt');<br />
+ numku := numer;<br />
+ randomize;<br />
+ AssignFile(F, combobox1.Text +'\shf'+inttostr(NumKU)+'.txt');<br />
+ Reset(F);<br />
+ i:=1;<br />
+ j:=32;<br />
+ if j > 255 then<br />
+ begin<br />
+ j:=32;<br />
+ i:=i+1;<br />
+ end;<br />
+ tmp := '';<br />
+ Readln(F, tmp);<br />
+ por := 1;<br />
+ for i := 1 to 200 do<br />
+ begin<br />
+ for j := 32 to 255 do<br />
+ begin<br />
+ while 3 <> 2 do<br />
+ begin<br />
+ if tmp[por] = ' ' then<br />
+ begin<br />
+ por := por + 1;<br />
+ break;<br />
+ end;<br />
+ tmps := tmps + tmp[por];<br />
+ por := por + 1;<br />
+ end;<br />
+ shifr[i,j] := strtoint(tmps);<br />
+ tmps:= '';<br />
+ end;<br />
+ end;</p>
+
+<p> for i := 1 to 200 do<br />
+ begin<br />
+ if ish[i] = '' then break;<br />
+ zas[i]:= shifr[i,ord(ish[i][1])];<br />
+ end;<br />
+ zas[201]:= numer;</p>
+
+<p> CloseFile(f);</p>
+
+<p><br />
+ AssignFile(F, 'zashifr.txt');<br />
+ ReWrite(f);</p>
+
+<p> for i := 1 to 201 do<br />
+ begin<br />
+ Write(F, inttostr(zas[i]));<br />
+ Write(F, ' ');<br />
+ end;</p>
+
+<p> CloseFile(f);<br />
+ i := 1;<br />
+ ppc := '';<br />
+ while i <= 201 do<br />
+ begin<br />
+ ppc := ppc + inttostr(zas[i]) + ' ';<br />
+ i := i+1;<br />
+ end;<br />
+ memo2.Lines.Add(ppc);<br />
+ sleep(1);<br />
+ numer := 1;</p>
+
+<p>end;</p>
+
+<p>procedure TForm1.rashifrovka;<br />
+begin<br />
+end;</p>
+
+<p>procedure TForm1.Button3Click(Sender: TObject);<br />
+begin<br />
+ sozdanie;<br />
+end;</p>
+
+<p>procedure TForm1.Button4Click(Sender: TObject);<br />
+var<br />
+ ss:string;<br />
+ F: TextFile;<br />
+ i:integer;<br />
+begin</p>
+
+<p> AssignFile(F, edit2.Text+'.txt');<br />
+ Reset(F);<br />
+ while NOT EOF(F) do<br />
+ begin<br />
+ Readln(F,ss);<br />
+ end;<br />
+// showmessage(ss);</p>
+
+<p> for i := 1 to 200 do<br />
+ begin<br />
+ ish[i] := '';<br />
+ end;</p>
+
+<p> for i := 1 to length(ss) do<br />
+ begin<br />
+ ish[i] := ss[i];<br />
+ end;<br />
+ CloseFile(f);<br />
+ memo1.Lines.LoadFromFile(edit2.Text);<br />
+ sleep(1);</p>
+
+<p>end;</p>
+
+<p>procedure ListFileDir(Path: string; FileList: TStrings);<br />
+var<br />
+ SR: TSearchRec;<br />
+begin<br />
+ if FindFirst(Path + '*.*', faAnyFile, SR) = 0 then<br />
+ begin<br />
+ repeat<br />
+ if (SR.Attr = faDirectory) then<br />
+ begin<br />
+ if (SR.Name = '.') or (SR.Name = '..') then<br />
+ begin</p>
+
+<p> end else<br />
+ begin<br />
+ FileList.Add(SR.Name);<br />
+ end;<br />
+ end;<br />
+ until FindNext(SR) <> 0;<br />
+ FindClose(SR);<br />
+ end;<br />
+end;</p>
+
+<p>procedure TForm1.ComboBox1DropDown(Sender: TObject);<br />
+begin<br />
+ ComboBox1.Clear;<br />
+ ListFileDir('', ComboBox1.Items);</p>
+
+<p>end;</p>
+
+<p>procedure TForm1.FormCreate(Sender: TObject);<br />
+begin<br />
+ NumKU := 1;<br />
+end;</p>
+
+<p>procedure TForm1.Button7Click(Sender: TObject);<br />
+begin<br />
+ NumKU := strtoint(edit1.text);<br />
+end;</p>
+
+<p>procedure TForm1.Button8Click(Sender: TObject);<br />
+begin<br />
+ memo1.Lines.Clear;<br />
+ memo2.Lines.Clear;<br />
+end;</p>
+
+<p>procedure TForm1.Button5Click(Sender: TObject);<br />
+begin<br />
+ memo2.Lines.LoadFromFile(edit4.Text+'.txt');<br />
+end;</p>
+
+<p>procedure TForm1.Button6Click(Sender: TObject);<br />
+var<br />
+tm : string;<br />
+begin<br />
+ randomize;<br />
+ tm := inttostr(random(1000))+'.txt';<br />
+ memo2.Lines.SaveToFile(tm);<br />
+ showmessage('Закодированное сообщение сохраненно в файл : '+tm);<br />
+end;</p>
+
+<p>procedure TForm1.Button1Click(Sender: TObject);<br />
+var<br />
+ ss:string;<br />
+ i:integer;<br />
+begin<br />
+ ss := memo1.Lines.Strings[0];<br />
+ for i := 1 to 200 do<br />
+ begin<br />
+ ish[i] := '';<br />
+ end;</p>
+
+<p> for i := 1 to length(ss) do<br />
+ begin<br />
+ ish[i] := ss[i];<br />
+ end;<br />
+ zashifrovka;<br />
+end;</p>
+
+<p>procedure TForm1.Button2Click(Sender: TObject);<br />
+var<br />
+ s,ss:string;<br />
+ i,j,por : integer;<br />
+ F,Ff: TextFile;<br />
+ tmp,tmps : string;<br />
+begin<br />
+ memo2.Lines.SaveToFile('tmp.txt');<br />
+ AssignFile(Ff, 'tmp.txt');<br />
+ Reset(Ff);<br />
+ i:=1;<br />
+ j:=32;<br />
+ if j > 255 then<br />
+ begin<br />
+ j:=32;<br />
+ i:=i+1;<br />
+ end;<br />
+ tmp := '';<br />
+ Readln(Ff, tmp);<br />
+// tmp := memo2.Lines.Strings[0];<br />
+ por := 1;<br />
+ for i := 1 to 201 do<br />
+ begin<br />
+ while 3 <> 2 do<br />
+ begin<br />
+ if tmp[por] = ' ' then<br />
+ begin<br />
+ por := por + 1;<br />
+ break;<br />
+ end;<br />
+ tmps := tmps + tmp[por];<br />
+ por := por + 1;<br />
+ end;<br />
+ zas[i] := strtoint(tmps);<br />
+ tmps:= '';<br />
+ end;<br />
+ numku := zas[201];<br />
+ CloseFile(ff);<br />
+ AssignFile(F, combobox1.Text +'\shf'+inttostr(NumKU)+'.txt');<br />
+ Reset(F);<br />
+ i:=1;<br />
+ j:=32;<br />
+// showmessage(combobox1.Text +'\shf'+inttostr(NumKU)+'.txt');<br />
+ if j > 255 then<br />
+ begin<br />
+ j:=32;<br />
+ i:=i+1;<br />
+ end;<br />
+ tmp := '';<br />
+ Readln(F, tmp);<br />
+ por := 1;<br />
+ for i := 1 to 200 do<br />
+ begin<br />
+ for j := 32 to 255 do<br />
+ begin<br />
+ while 3 <> 2 do<br />
+ begin<br />
+ if tmp[por] = ' ' then<br />
+ begin<br />
+ por := por + 1;<br />
+ break;<br />
+ end;<br />
+ tmps := tmps + tmp[por];<br />
+ por := por + 1;<br />
+ end;<br />
+ shifr[i,j] := strtoint(tmps);<br />
+ tmps:= '';<br />
+ end;<br />
+ end;</p>
+
+<p> for i := 1 to 200 do<br />
+ begin<br />
+ for j := 32 to 255 do<br />
+ begin<br />
+ if (zas[i] = shifr[i,j]) or (zas[i] = 0) then<br />
+ begin<br />
+ break;<br />
+ end;<br />
+ end;<br />
+ s := s + chr(j);<br />
+ end;</p>
+
+<p> CloseFile(f);<br />
+ memo1.Lines.Add(s);<br />
+end;</p>
+
+<p>procedure TForm1.N2Click(Sender: TObject);<br />
+begin<br />
+showmessage('Карнавал 1.6.4' + chr(13)+ chr(10) +<br />
+ 'Система шифрования сообщений' + chr(13)+ chr(10) +<br />
+ 'Обеспечит гарантию конфидециальности' + chr(13)+ chr(10) +<br />
+ 'на 101%' + chr(13)+ chr(10) +<br />
+ 'Декодировать сообщения без ключа'+ chr(13)+ chr(10) +<br />
+ 'Невозможно даже теоретически' + chr(13)+ chr(10) +<br />
+ ''+ chr(13)+ chr(10) +<br />
+ ''+ chr(13)+ chr(10) +<br />
+ 'Все права защищенны очень сильно!'+ chr(13)+ chr(10) +<br />
+ ' by Mr.White'<br />
+ );<br />
+end;</p>
+
+<p>end.<br />
+</p>
+

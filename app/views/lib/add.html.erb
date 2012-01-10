@@ -1,0 +1,18 @@
+﻿Добавить книгу
+<%= @tmp %>
+
+<%= form_tag '/lib/add' do %>
+  Раздел
+  <%= collection_select(:list, :ida, Razd.all, :name, :name) %><br />
+  Автор
+  <%= text_field_tag :avtor, @hg %><br />
+  Название
+  <%= text_field_tag :nazv, "" %><br />
+  Коментарий
+  <%= text_area_tag :komment, "" %><br />
+
+
+
+  <%= submit_tag "Add" %><br />
+<% end %>
+

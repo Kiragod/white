@@ -1,0 +1,19 @@
+﻿<h1>Регистрация</h1>
+
+<%= form_tag '/sessions/signup' do %>
+
+  Логин
+  <%= text_field_tag :login, "" %><br />
+  Мыло
+  <%= text_field_tag :email, "" %><br />
+  Пароль
+  <%= password_field_tag :password, "" %>
+  Подтвержаение
+  <%= password_field_tag :confirm, "" %>
+
+
+  <%= submit_tag "signup" %><br />
+<% end %>
+
+
+

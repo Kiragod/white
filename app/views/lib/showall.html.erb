@@ -1,0 +1,59 @@
+﻿фильтр:<br />
+
+<%= form_tag '/lib/showall' do %>
+Искать по разделу:
+
+  <%= collection_select(:list, :ida, Razd.all, :name, :name) %><br />
+
+
+
+  <%= submit_tag "Search" %>
+
+    <%= form_tag '/lib/showall' do %>
+     <%= submit_tag "Cancel" %>
+    <% end %>
+
+<br />
+<% end %>
+
+
+
+<br />
+
+
+<%if @otf == ""  %>
+
+
+Найденные книги :<br /> 
+
+<%@sw.each do |p| %>
+  
+
+ <%=p.razdel%>
+ <%=p.avtor%>
+ <%=p.nazv%>
+ <%= link_to "pokaz", {:action => 'odna', :id => p.id} -%><br />
+
+<% end %>   
+
+
+
+
+<% else %>   
+
+  <%@sw.each do |p| %>
+    <%if p.razdel == @vibraz %>
+
+     <%=p.razdel%>
+     <%=p.avtor%>
+     <%=p.nazv%>
+     <%= link_to "pokaz", {:action => 'odna', :id => p.id} -%><br />
+
+    <% end %>   
+  <% end %>   
+<% end %>
+
+
+<br />
+
+

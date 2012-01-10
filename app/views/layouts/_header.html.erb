@@ -1,0 +1,21 @@
+<header>
+  <nav class="round">
+    <ul>
+
+      <li><%= link_to "Home", root_path %></li>
+      <li><%= link_to "Servises", servis_path %></li>
+      <li><%= link_to "libruary", lib_libruary_path %></li>
+      <li><%= link_to "About", about_path %></li>
+
+          <% if cookies[:usr].nil? %>
+            <li><%= link_to "Login", sessions_login_path %></li>
+            <li><%= link_to "Signup", sessions_signup_path %></li>
+          <% else %>
+            <li><%= link_to "Posts", post_posts_path %></li>
+            <li><%= link_to "Logout", sessions_logout_path %></li>
+            <%= cookies[:usr] %>
+          <% end %>
+
+ </ul>
+  </nav>
+</header>

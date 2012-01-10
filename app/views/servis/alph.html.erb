@@ -1,0 +1,8 @@
+﻿Введите в верхнее поле ввода слова, и нажмите "Sort", для сортировки их по алфавиту.<br /><br />
+
+<%= form_tag '/servis/alph' do %>
+    <%= text_area_tag :txt, @alph %>
+                       <br />
+    <%= submit_tag "Sort" %>
+<% end %>                    <br />
+<%= text_area_tag :rezz, @rezult %>    

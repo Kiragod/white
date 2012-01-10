@@ -1,0 +1,51 @@
+<footer>
+  <nav class="round">
+    <ul>
+
+          <% if @clc == true %>
+
+      <li><%= link_to "Sortirovka", servis_alph_path %></li>  
+
+          <% end %>
+
+
+          <% if @alp == true %>
+
+      <li><%= link_to "Calculator", servis_calc_path %></li>  
+
+          <% end %>
+
+
+          <% if @ad == true %>
+
+      <li><%= link_to "showall", lib_showall_path %></li>
+      <li><%= link_to "libruary", lib_libruary_path %></li>
+
+          <% end %>
+
+
+
+          <% if @shw == true %>
+
+
+      <li><%= link_to "Add", lib_add_path %></li>
+      <li><%= link_to "libruary", lib_libruary_path %></li>
+
+          <% end %>
+
+          <% if @odn == true %>
+
+
+      <li><%= link_to "Add", lib_add_path %></li>
+      <li><%= link_to "showall", lib_showall_path %></li>
+      <li><%= link_to "libruary", lib_libruary_path %></li>
+
+          <% end %>
+
+
+
+      <li><%= link_to "Home", root_path %></li>  
+
+    </ul>
+  </nav>
+</footer>
